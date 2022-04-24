@@ -67,25 +67,25 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private Users userDtoToUsers(UserDto userDto) {
-//		Users user = this.modelMapper.map(userDto, Users.class);
-		Users user = new Users();
-		user.setId(userDto.getId());
-		user.setName(userDto.getName());
-		user.setEmail(userDto.getEmail());
-		user.setPassword(userDto.getPassword());
-		user.setAbout(userDto.getAbout());
+		Users user = this.modelMapper.map(userDto, Users.class);
+//		Users user = new Users();
+//		user.setId(userDto.getId());
+//		user.setName(userDto.getName());
+//		user.setEmail(userDto.getEmail());
+//		user.setPassword(userDto.getPassword());
+//		user.setAbout(userDto.getAbout());
 		return user;
 
 	}
 
 	private UserDto userToUserDto(Users user) {
-//		UserDto userDto = this.modelMapper.map(user, UserDto.class);
-		UserDto userDto = new UserDto();
-		userDto.setId(user.getId());
-		userDto.setName(user.getName());
-		userDto.setEmail(user.getEmail());
-		userDto.setPassword(user.getPassword());
-		userDto.setAbout(user.getAbout());
+		UserDto userDto = this.modelMapper.map(user, UserDto.class);
+//		UserDto userDto = new UserDto();
+//		userDto.setId(user.getId());
+//		userDto.setName(user.getName());
+//		userDto.setEmail(user.getEmail());
+//		userDto.setPassword(user.getPassword());
+//		userDto.setAbout(user.getAbout());
 		return userDto;
 
 	}
