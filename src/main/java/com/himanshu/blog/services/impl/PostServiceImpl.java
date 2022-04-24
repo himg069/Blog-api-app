@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.himanshu.blog.entities.Category;
@@ -21,8 +21,6 @@ import com.himanshu.blog.repositories.CategoryRepo;
 import com.himanshu.blog.repositories.PostRepo;
 import com.himanshu.blog.repositories.UserRepo;
 import com.himanshu.blog.services.PostService;
-
-import net.bytebuddy.asm.Advice.This;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -86,10 +84,19 @@ public class PostServiceImpl implements PostService {
 
 	// manually created
 	@Override
-	public PostResponse getAllPost(Integer pageNumber, Integer pageSize) {
+	public PostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
 		// TODO Auto-generated method stub
 
-		PageRequest pageing = PageRequest.of(pageNumber, pageSize);
+//		Sort sort = null;
+//		if (sortDir.equalsIgnoreCase("desc")) {
+//			sort = Sort.by(sortBy).descending();
+//		} else {
+//			sort = Sort.by(sortBy).ascending();
+//		}
+
+		Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
+		
+		PageRequest pageing = PageRequest.of(pageNumber, pageSize, sort);
 
 //		List<Post> findAllPost = this.postRepo.findAll();
 		Page<Post> pagePost = this.postRepo.findAll(pageing);
