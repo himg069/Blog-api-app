@@ -146,9 +146,20 @@ public class PostServiceImpl implements PostService {
 		return findAllPostDtoByUser;
 	}
 
+	/*
+	 * ERROR: beacuse of hibernate 5.6.6 and onwards, we face below issue
+	 * "InvalidDataAccessApiUsageException: Parameter value [\] did not match expected type [java.lang.String (n/a)]"
+	 * this has not been resolved till now (hibernate 5.6.7)
+	 * 
+	 * ALternate resolution: write JPL query to the findByTitleContaining method and
+	 * use % in the output
+	 */
 	@Override
-	public List<Post> searchPost(String keyword) {
+	public List<PostDto> searchPost(String keyword) {
 		// TODO Auto-generated method stub
-		return null;
+		List<Post> postSearchByTitle = this.postRepo.searchByTitle("%" + keyword + "%");
+		List<PostDto> postDtoSearchByTitle = postSearchByTitle.stream()
+				.map((post) -> this.modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
+		return postDtoSearchByTitle;
 	}
 }
