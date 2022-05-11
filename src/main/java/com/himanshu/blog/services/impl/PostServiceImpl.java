@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,6 +27,9 @@ import com.himanshu.blog.services.PostService;
 @Service
 public class PostServiceImpl implements PostService {
 
+	public static final Logger log = LogManager.getLogger(PostServiceImpl.class);
+	
+	
 	@Autowired
 	private PostRepo postRepo;
 
@@ -94,8 +99,9 @@ public class PostServiceImpl implements PostService {
 //			sort = Sort.by(sortBy).ascending();
 //		}
 
+		log.info("now i jumped to serviceimpl class for getAllPost");
 		Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
-		
+
 		PageRequest pageing = PageRequest.of(pageNumber, pageSize, sort);
 
 //		List<Post> findAllPost = this.postRepo.findAll();

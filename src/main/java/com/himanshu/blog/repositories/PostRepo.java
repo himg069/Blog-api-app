@@ -10,9 +10,10 @@ import com.himanshu.blog.entities.Category;
 import com.himanshu.blog.entities.Post;
 import com.himanshu.blog.entities.Users;
 
-public interface PostRepo extends JpaRepository<Post, Integer>{
+public interface PostRepo extends JpaRepository<Post, Integer> {
 
 	List<Post> findAllByUser(Users user);
+
 	List<Post> findAllByCategory(Category category);
 
 	@Query("select p from Post p where p.title like :key")
