@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.himanshu.blog.JWTSecurity.JWTTokenHelper;
+import com.himanshu.blog.exceptions.APIException;
 import com.himanshu.blog.payload.JWTAuthenticationRequest;
 import com.himanshu.blog.payload.JWTAuthenticationResponse;
+import com.himanshu.blog.payload.UserDto;
+import com.himanshu.blog.services.UserService;
 
 @RestController
 @RequestMapping("/api/v1/auth/")
@@ -27,9 +30,12 @@ public class JWTAuthenticationController {
 	private UserDetailsService userDetailsService;
 	@Autowired
 	private AuthenticationManager authenticationManager;
+	@Autowired
+	private UserService userService;
 
 	@PostMapping("/login")
-	public ResponseEntity<JWTAuthenticationResponse> createToken(@RequestBody JWTAuthenticationRequest request) throws Exception {
+	public ResponseEntity<JWTAuthenticationResponse> createToken(@RequestBody JWTAuthenticationRequest request)
+			throws Exception {
 		this.authenticate(request.getUsername(), request.getPassword());
 		UserDetails loadUserByUsername = this.userDetailsService.loadUserByUsername(request.getUsername());
 		String generatedToken = this.jwtTokenHelper.generateToken(loadUserByUsername);
@@ -44,11 +50,18 @@ public class JWTAuthenticationController {
 				username, password);
 
 		try {
-		this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);}
-		catch(BadCredentialsException e) {
+			this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+		} catch (BadCredentialsException e) {
 			System.out.println("Credentials are not valid !!");
-			throw new Exception("Invalid username or password !!");
+			throw new APIException("Invalid username or password !!");
 		}
 
 	}
+
+	@PostMapping("/register")
+	public ResponseEntity<UserDto> registerNewUser(@RequestBody UserDto userDto) {
+		UserDto registerNewUser = this.userService.registerNewUser(userDto);
+		return new ResponseEntity<UserDto>(registerNewUser, HttpStatus.OK);
+	}
+
 }

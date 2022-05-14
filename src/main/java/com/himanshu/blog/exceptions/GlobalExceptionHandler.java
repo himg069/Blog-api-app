@@ -16,20 +16,27 @@ import com.himanshu.blog.payload.ApiResponse;
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(NahiMilPaaRhaBhaiException.class)
-	public ResponseEntity<ApiResponse> nhiMilPaaRhaBhaiExceptionHandler(NahiMilPaaRhaBhaiException np){
+	public ResponseEntity<ApiResponse> nhiMilPaaRhaBhaiExceptionHandler(NahiMilPaaRhaBhaiException np) {
 		String message = np.getMessage();
-		ApiResponse apiResponse = new ApiResponse(message,false);
-		return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.NOT_FOUND);
+		ApiResponse apiResponse = new ApiResponse(message, false);
+		return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.NOT_FOUND);
 	}
-	
+
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<Map<String,String>> handleMethodArgsNotValidException(MethodArgumentNotValidException ex){
-		Map<String,String> resp = new HashMap<>();
-		ex.getBindingResult().getAllErrors().forEach((error)->{
-			String fieldName = ((FieldError)error).getField();
+	public ResponseEntity<Map<String, String>> handleMethodArgsNotValidException(MethodArgumentNotValidException ex) {
+		Map<String, String> resp = new HashMap<>();
+		ex.getBindingResult().getAllErrors().forEach((error) -> {
+			String fieldName = ((FieldError) error).getField();
 			String fieldMessage = error.getDefaultMessage();
 			resp.put(fieldName, fieldMessage);
 		});
-		return new ResponseEntity<Map<String,String>>(resp,HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<Map<String, String>>(resp, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(APIException.class)
+	public ResponseEntity<ApiResponse> APIExceptionHandler(APIException np) {
+		String message = np.getMessage();
+		ApiResponse apiResponse = new ApiResponse(message, true);
+		return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.BAD_REQUEST);
 	}
 }
